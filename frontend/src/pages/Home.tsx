@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain, Zap, Target, BarChart3 } from 'lucide-react';
+import { Zap, Target, BarChart3 } from 'lucide-react';
 import QuizForm from '../components/QuizForm';
 
 const Home: React.FC = () => {
