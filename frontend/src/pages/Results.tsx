@@ -32,7 +32,7 @@ const Results: React.FC = () => {
 
     setIsDownloading(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/quiz/${quizData.quiz_id}/pdf`, {
+      const response = await fetch(`https://asklet-backend.onrender.com/api/quiz/${quizData.quiz_id}/pdf`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
