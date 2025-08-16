@@ -98,6 +98,8 @@ class QuizManager:
             percentage=percentage
         )
     
+    from reportlab.lib.utils import simpleSplit
+    
     def generate_pdf_report(self, evaluation: QuizEvaluation) -> str:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"quiz_result_{timestamp}.pdf"
@@ -106,15 +108,19 @@ class QuizManager:
         
         c = canvas.Canvas(full_path, pagesize=letter)
         width, height = letter
-        y = height - 40
+        margin = 40
+        y = height - margin
+
         c.setFont("Helvetica-Bold", 16)
-        c.drawString(40, y, "Quiz Results Report")
+        c.drawString(margin, y, "Quiz Results Report")
         y -= 30
         
         c.setFont("Helvetica", 12)
-        c.drawString(40, y, f"Score: {evaluation.score}/{evaluation.total_questions} ({evaluation.percentage:.1f}%)")
+        c.drawString(margin, y, f"Score: {evaluation.score}/{evaluation.total_questions} ({evaluation.percentage:.1f}%)")
         y -= 30
-        
+
+        wrap_width = width - 2 * margin  
+
         for result in evaluation.results:
             lines = [
                 f"Question {result.question_no}: {result.question}",
@@ -124,15 +130,15 @@ class QuizManager:
                 f"Result: {'Correct' if result.is_correct else 'Incorrect'}",
                 "-" * 80
             ]
-            
             for line in lines:
                 if line:
-                    c.drawString(40, y, line[:100])  # Truncate long lines
-                    y -= 15
-                if y < 60:
-                    c.showPage()
-                    c.setFont("Helvetica", 12)
-                    y = height - 40
-        
+                    wrapped = simpleSplit(line, 'Helvetica', 12, wrap_width)
+                    for wline in wrapped:
+                        c.drawString(margin, y, wline)
+                        y -= 15
+                        if y < margin + 20:
+                            c.showPage()
+                            c.setFont("Helvetica", 12)
+                            y = height - margin
         c.save()
         return full_path
