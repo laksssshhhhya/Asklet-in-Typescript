@@ -6,6 +6,7 @@ from models import QuizResult, QuizEvaluation
 from util import QuestionGenerator
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import simpleSplit
 
 class QuizManager:
     def __init__(self):
@@ -98,7 +99,7 @@ class QuizManager:
             percentage=percentage
         )
     
-    from reportlab.lib.utils import simpleSplit
+
     
     def generate_pdf_report(self, evaluation: QuizEvaluation) -> str:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
