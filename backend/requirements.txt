@@ -15,6 +15,7 @@ uvicorn
 python-dotenv
 langchain-groq
 langchain
+langchain-core
 pydantic
 reportlab
 pandas
